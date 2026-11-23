@@ -1,6 +1,6 @@
 # TypeScript
 
-How TypeScript code meets `core.md`, wherever it runs: apps, Workers, tooling and shared libraries; read `core.md` first. `web.md` and `workers.md` add each platform's rules.
+Read this when writing or reviewing TypeScript anywhere: apps, Workers, tooling and shared libraries. It says how TypeScript code meets `core.md`; read that first. `web.md` and `workers.md` add each platform's rules.
 
 ## Toolchain and dependencies
 
