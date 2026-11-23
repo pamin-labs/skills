@@ -27,7 +27,7 @@ Read this when writing or reviewing Zig. It says how Zig code meets `core.md`, `
     diff/regions.zig
     codec.zig
     codec/png.zig
-  bench/main.zig      // @import("uidiff") only
+  bench/main.zig      // @import("lib") only, the package's public module
   ```
 - **Shared types inside a module.** Types several files under `name/` share go in `name/types.zig`, which those files import directly and `name.zig` re-exports; a file under `name/` never imports `../name.zig`.
 - **The layout test.** A test walks `src/` (`std.Io.Dir.walk`) against the backticked paths in `AGENTS.md` and fails on a file outside them or on a named path that is gone.
@@ -106,6 +106,6 @@ This reference adds:
 
 - **Tests meet the same bar as code.** `test` blocks sit at the end of the file they test; tests through a package's public API go in `tests/`; both run from `zig build test`. Tests build inputs from typed values, name values from their owners, and decode JSON output into the program's own types, never compare it as text. Repeated cases are one table looped with `for`.
 - **Memory is checked.** Tests use `std.testing.allocator`, so a leak fails the run, and `std.testing.checkAllAllocationFailures` for code whose allocation-failure path matters.
-- **Deterministic and independent:** tests use `std.testing.io`, no sleeps, wall clock or network, and run against stubs, never a real paid service; anything random seeds from `std.testing.random_seed`; fixtures are small committed files. A fix comes with a test that fails without it.
+- **Deterministic and independent:** tests use `std.testing.io`, no sleeps, wall clock or network, and run against stubs, never a real paid service; anything random seeds from `std.testing.random_seed`, which the run prints and `zig build test --seed <n>` replays; fixtures are small committed files. A fix comes with a test that fails without it.
 - **Data races.** Tests of concurrent code also run in a build step, called by the gates, whose test module sets `.sanitize_thread = true`.
 - **Parsers and decoders are fuzzed** with `std.testing.fuzz`, run by `zig build test --fuzz`, and a crash it finds becomes a fixture.

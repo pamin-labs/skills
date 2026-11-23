@@ -26,7 +26,7 @@ Read this when writing or reviewing Go. It says how Go code meets `core.md`, `da
 - **Deadlines.** Each call a request waits on runs under `context.WithTimeoutCause`, with a duration named beside the call and a cause naming it. Work that must finish after the request ends (an audit write, a cleanup) runs on `context.WithoutCancel(ctx)` with its own timeout.
 - **Shutdown.** `signal.NotifyContext` cancels the root context on SIGTERM; `http.Server.Shutdown` drains requests before a named deadline, then the wiring awaits its background tasks.
 - **No data races:** shared state is owned by one goroutine or guarded by one mutex; `go test -race` runs in the gates.
-- **Caches and per-user state** use `github.com/hashicorp/golang-lru/v2`, safe for concurrent use; a test fails on a struct field that is a map keyed by an end user's id.
+- **Caches and per-end-user state** use `github.com/hashicorp/golang-lru/v2`, safe for concurrent use; a test fails on a struct field that is a map keyed by an end user's id.
 
 ## Types
 

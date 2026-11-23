@@ -39,7 +39,7 @@ Read this when writing or reviewing Rust. It says how Rust code meets `core.md`,
 ## Logs, SQL, stubs and tests
 
 - **Logs** go through `tracing` with structured fields carrying ids, counts and durations only; a type holding a secret redacts it in `Debug`.
-- **SQL** (`sqlx`) binds every value (`$1`, `.bind`); a query built with `format!` from input is a defect, and what cannot be bound (an identifier) comes from a closed list in code.
+- **SQL** (`sqlx`) lives in `.sql` files read with `sqlx::query_file!` or `query_file_as!` (checked at compile time) or `include_str!`, never as a string literal in Rust, and binds every value (`$1`, `.bind`); a query built with `format!` from input is a defect, and what cannot be bound (an identifier) comes from a closed list in code.
 - **Stubs** compile only under `#[cfg(test)]` or a non-default feature that tests, the benchmark and the local runner enable.
 - **Tests.** Unit tests sit beside the code in `#[cfg(test)] mod tests`; tests of a crate's behaviour through its public API go in its `tests/` directory. Tests are deterministic and independent: no `sleep` to wait (await the event, poll with a deadline, or pause tokio's clock), no dependence on test order, the wall clock, the network or another test's state; anything random uses a fixed seed. A fix comes with a test that fails without it.
 - **Fuzzing.** Parsers of outside input are fuzzed with `cargo fuzz` or property-tested with `proptest`; a crash found becomes a regression test.
