@@ -14,7 +14,7 @@ How a React and Vite web client, user client or operator console alike, meets `c
 - **Every address is in one `routes.ts`,** and the router is built from it.
 - **Module direction.** `api/`, `i18n/` and `ui/` never import from `screens/`, and a check fails one that does; a screen reaches another only through a lazy import of its entry.
 - **Screens reach the server only through generated hooks or `api/`'s own.** A screen imports its operation's generated query and mutation hooks directly; `api/` adds a hook only for logic of its own (an optimistic update, a conditional invalidation, a stream, a cache replacement), never one that only forwards. Per-operation query defaults (`staleTime`, polling, retry) are small exported `query.queryOptions` mutators named under `override.operations.<operationId>` in the Orval config, because Orval deprecates `query.options`; no operation-name lookup, central defaults table or wrapper hook. A lint override fails a screen that imports the transport, `QueryClient` or `useQueryClient`, or calls `fetch`.
-- **Size.** A component file is split by concern when it grows past what one review can hold, judged in review; a component file uses at most one data hook, its rules moving to plain functions with tests, and a test enforces the hook limit.
+- **Size.** A component file is split by concern when it holds a second one, never to meet a line count; a component file uses at most one data hook, its rules moving to plain functions with tests, and a test enforces the hook limit.
 
 ## Logic and state
 

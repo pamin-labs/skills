@@ -11,7 +11,7 @@ How Rust code meets `core.md` and `performance.md`; read those first.
 
 ## Modules and files
 
-- **Module layout.** A module with sub-modules is `name.rs` beside a `name/` directory, never `name/mod.rs`. Outside code uses the items `name.rs` re-exports, never a path into `name/`. Types several files of a module share go in `name/types.rs`.
+- **Module layout.** A module with sub-modules is `name.rs` beside a `name/` directory, never `name/mod.rs` or `name/name.rs`. Outside code uses the items `name.rs` re-exports, never a path into `name/`. Types several files of a module share go in `name/types.rs`.
 - **The layer test** reads `cargo metadata` in a workspace and fails on a crate dependency that points back; in a single crate it reads each file's `use` paths.
 - **File order** is core's in Rust terms: `use` lines, std first, then external crates, then the crate's own; types; `const` and `static`; `impl` blocks grouped by type, constructors first, public methods before private; free functions in rough call order; `#[cfg(test)] mod tests` last.
 
