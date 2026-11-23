@@ -42,7 +42,7 @@ Read `core.md` and each reference for a language, platform or concern the diff c
 ## When the reference and the repository disagree
 
 - A repository's `AGENTS.md` says how it meets each rule and what it has not built yet; it never weakens a rule, and a gap it names is no licence to widen: new code follows the rule.
-- A rule that seems wrong for a case is raised with the user and recorded in a decision record, then changed in `pamin-labs/skills`; never work around it in code.
+- A rule that seems wrong for a case is raised with the user and recorded in a decision record, then changed at the skill's source (`pamin-labs/skills`, or your own fork); never work around it in code.
 
 ## Reviewing a change and opening the PR
 
