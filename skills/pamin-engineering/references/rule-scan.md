@@ -20,7 +20,7 @@ Each verified finding has one class:
 
 - **One PR per finding,** mergeable on its own.
 - **Behaviour first.** A fix comes with a test of the owner's behaviour that fails before the fix.
-- **A source guard only where it binds a rule.** A test that reads source text is added only for a structural rule (layers, imports, the layout against its `AGENTS.md` list, declaration order, typed ids, a committed generated file, a closed set against its source), or as a row in the project's one table of "only in its owner" rules, with the owner file and the reason on the row, when nothing else can see the copy.
+- **A source guard only where it binds a rule.** A test that reads source text is added only for a structural rule (layers, imports, the layout against its `AGENTS.md` list, declaration order, typed ids, a committed generated file, a closed set against its source), or as a row in the project's source-rules test naming the owner file and the reason, when nothing else can see the copy.
 - **No guard that only pins a past spelling:** none that refuses one old spelling in one or two files, or repeats what a type check, a lint rule or another guard refuses. A pattern the linter can check goes to the linter.
 - **UI-only findings and owner questions are listed apart and never fixed silently.** A UI-only fix waits for the owner's look at its before-and-after screenshots; an owner question goes to the owner with options and a recommendation, and its answer is recorded in a decision record before any fix.
 
