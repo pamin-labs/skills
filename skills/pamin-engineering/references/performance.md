@@ -1,6 +1,6 @@
 # Performance
 
-Rules for code on a request's path (a service's hot path, named in its `AGENTS.md`), in any language. Read `core.md` first: its "Parse once", "Hot paths keep their database round trips flat", bounded state and "Measure before and after" rules apply too. `rust.md` and `go.md` say how their code meets these.
+Rules for code on a request's path (a service's hot path, named in its `AGENTS.md`), in any language. Read `core.md` first: its "Parse once", "Hot paths keep their database round trips flat", bounded state and "Measure before and after" rules apply too. `rust.md`, `go.md` and `zig.md` say how their code meets these.
 
 - **Hot paths allocate once.** No allocation or cloning inside loops: reuse buffers sized from what is known, never build an intermediate collection only to iterate it once, and never format a value only compared or written out.
 - **No repeated parsing** on a hot path; reuse existing optimised kernels rather than writing your own loop.
