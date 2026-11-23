@@ -56,4 +56,4 @@ Follow `core.md`'s "Working and review" and "Commits and PRs": rebase and build 
 
 ## Changing these rules
 
-This skill's source is the public `pamin-labs/skills` repository; a repository installs it with the skills CLI and never edits its copy. A change is made there, cites its decision record, and adds no repository-specific fact; those stay in the repository's `AGENTS.md`.
+This skill's source is the public `pamin-labs/skills` repository; a repository installs it with the skills CLI and never edits its copy. A change for the team's repositories is made there (a project outside the team may keep its own fork), cites its decision record, and adds no repository-specific fact; those stay in the repository's `AGENTS.md`.
