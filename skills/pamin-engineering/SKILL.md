@@ -26,6 +26,7 @@ Read every reference the change touches, before writing and again before the PR 
 | `references/core.md` | Always: shape of code, layers and domains, errors, data, settings, calls to other services, resources, review, commits and PRs |
 | `references/rust.md` | Writing or reviewing Rust: toolchain, errors, panics, `unsafe`, async, tasks, SQL, tests |
 | `references/go.md` | Writing or reviewing Go: tools, file layout, errors, context, concurrency, types, tests |
+| `references/zig.md` | Writing or reviewing Zig: toolchain, build modes, layers and reuse, names, allocators, error sets, illegal behaviour, SIMD, tests |
 | `references/performance.md` | Touching a request's hot path, a pool, start-up, or a benchmark |
 | `references/web.md` | A React, Vite and TypeScript web client or operator console |
 | `references/workers.md` | A Cloudflare Worker: routing, containers, config, deploys |
