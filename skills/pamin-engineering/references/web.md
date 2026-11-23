@@ -1,10 +1,11 @@
 # Web clients
 
-How a React and Vite web client, user client or operator console alike, meets `core.md`; read `core.md` and `typescript.md` first. A web client meets the same bar as a server.
+Read this when writing or reviewing a React, Vite and TypeScript web client, an end-user client or an operator console alike. It holds the architecture (modules, state, queries, types, tests, security); how the interface looks and behaves is `web-interface.md`, read with it for any change to what a screen shows. Read `core.md` and `typescript.md` first. A web client meets the same bar as a server.
 
 ## Stack
 
 - **Do not reinvent.** Reach for the platform (`Intl`, CSS, native elements, `fetch`, `URL`, `AbortController`; CSS over JavaScript, native elements over widgets), then the app's stack (its component and query libraries), then a maintained, widely used library pinned exactly, before writing your own.
+- **The React Compiler memoizes.** It is on in the build and in the tests, and any bailout fails the gate, so code keeps to the rules of React. A `"use no memo"` with its reason (a documented incompatible library) is the only opt-out. No hand-written `useMemo`, `useCallback` or `memo`: the compiler does it, and a hand copy only drifts.
 
 ## Modules
 
@@ -24,18 +25,18 @@ How a React and Vite web client, user client or operator console alike, meets `c
 - **Query keys and invalidation.** Keys come only from the generated client's query-key functions or an `api/` helper built on them, never string tuples. The one invalidation prefix is the generated key function without path parameters (Orval's `useOperationIdAsQueryKey`), checked against the generated keys by a test. Plain mutation invalidation is grouped in Orval's config (`mutationInvalidates`); optimistic and conditional invalidation stays in one `api/` module, with its reason; cache reads and writes use the generated `useSetQueryData`/`useGetQueryData`. Screens never take a `QueryClient`, and work ahead of the screens (a preload) is an `api/` function too.
 - **Deadlines.** Every request carries `AbortSignal.timeout` with a duration named once in `api/`; when it passes, the screen offers a retry.
 - **Retries follow the server.** The client retries, or offers a retry, from the problem's `retryable` flag, never from its own list of codes.
-- **Client ids on charged writes.** A charged write the client may send twice carries a client id, a UUID kept until the server has taken the request; a request the user means as a new one (a regenerate) gets none.
+- **Client ids on charged writes.** A charged write the client may send twice carries a client id, a UUID kept until the server has taken the request; a request the end user means as a new one (a regenerate) gets none.
 - **An event stream** is parsed with a maintained parser (`eventsource-parser`) that honours `id:` for resuming, with URLs and headers from the generated client's base path and auth.
 - **Storage.** `localStorage` and `sessionStorage` are reached only through one module that tolerates their absence; every key is a constant there, and a value read back is checked with a guard, never cast.
-- **One source for environment-derived values:** the API base path, the user's time zone and the locale each come from one helper.
+- **One source for environment-derived values:** the API base path, the end user's time zone and the locale each come from one helper.
 - **No hard-coded values owned elsewhere.** Limits, enums and locale lists come from the generated API types or one module, never literals in a form; the API base path, the server's port and storage keys are each written once; a fact the server owns (a document's version) is read from it or generated, never copied.
 - **Forms** validate with the API document's generated schemas through one form helper.
-- **Logs.** No `console` output of user content; a reported error carries ids and codes only.
+- **Logs.** No `console` output of end-user content; a reported error carries ids and codes only.
 
 ## Types and routes
 
 - **Typed from the server's OpenAPI document:** no hand-written request or response types. Errors are the server's problems, read by `code` typed as `Problem["code"]`, never bare strings. A stream event's required fields are listed once, typed from the document.
-- **Every route tree has an error element:** the root route has an `errorElement` (as does a layout whose children can fail apart from it) that shows the problem in the user's locale with a way to retry or go home, never the router's default page or an error's own text; a test reads the routes and fails on a root without one.
+- **Every route tree has an error element:** the root route has an `errorElement` (as does a layout whose children can fail apart from it) that shows the problem in the end user's locale with a way to retry or go home, never the router's default page or an error's own text; a test reads the routes and fails on a root without one.
 - **One route over a list.** A family of pages is one route whose segment takes values from one list; a name the list lacks is a 404.
 
 ## Text and locales
@@ -46,10 +47,9 @@ How a React and Vite web client, user client or operator console alike, meets `c
 
 ## Interface
 
-- **One component per pattern, composed, never rebuilt.** A pattern on more than one screen in the same role is one `ui/` component that screens compose, never rebuild from classes or restyle; a second screen's variant is a prop. The design document names each component with its file, and a new pattern adds its component and line there in the same PR. A shared piece moves to `ui/` the second time it appears.
-- **One implementation per concern:** one formatter per kind of value, besides the hook and component rules above.
-- **Tokens.** Colours and other design tokens are CSS variables from the design document, never literals in components; a token's value lives in one CSS file. Tailwind classes, no inline styles except computed values.
-- **Accessibility:** native elements first; every control has an accessible name; focus is visible; motion respects `prefers-reduced-motion`, Tailwind's `animate-*` utilities included.
+How a screen looks and behaves (components, tokens, accessibility, interaction, public pages, screenshots) is `web-interface.md`.
+
+- **One implementation per concern:** one formatter per kind of value, besides the hook rules above and `web-interface.md`'s component rule.
 
 ## Tests
 
@@ -62,5 +62,5 @@ How a React and Vite web client, user client or operator console alike, meets `c
 
 ## Operator consoles
 
-- **An operator console is its own app,** not screens of a user client: its types come from the operator API's own document, and it shares with a user client only what both draw and validate with (design tokens, a project of primitives in them, and the helpers that turn generated schemas' issues and server refusals into each app's messages, named in the repository's `AGENTS.md`). A user client never reaches the operator API. The console's own components (an admin framework's layout, tables and views) stay in it.
-- **A console on an admin framework's data hooks** gives the framework one data provider that calls only the operator API's generated client, typed route by route; the framework keys and invalidates queries by resource, the console's exception to the key rule above.
+- **An operator console is its own app,** not screens of an end-user client: its types come from the operator API's own document, and it shares with a user client only what both draw and validate with (design tokens, a project of primitives in them, and the helpers that turn generated schemas' issues and server refusals into each app's messages, named in the repository's `AGENTS.md`). An end-user client never reaches the operator API. The console's own components (an admin framework's layout, tables and views) stay in it.
+- **A console on an admin framework's data hooks** gives the framework one data provider that calls only the operator API's generated client, typed route by route; the framework keys and invalidates queries by resource, the console's exception to the key rule above. Invalidation that is not plain resource invalidation (optimistic, conditional or across resources) stays in one `api/` module with its reason, as the key rule says.
