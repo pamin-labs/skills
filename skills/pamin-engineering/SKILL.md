@@ -1,6 +1,6 @@
 ---
 name: pamin-engineering
-description: The engineering bar for code in this repository - fast, small, quick to build, clean, DRY, decoupled and easy to extend. Use it before writing or changing any code, before adding a dependency, before claiming something is faster or smaller, and when reviewing a change, even when the change looks small. Reach for it on words like implement, refactor, optimise, add a crate or package, abstraction, interface, layer, handler, migration, error code, setting, performance, memory, binary size, bundle size, build time, or "is this over-engineered".
+description: The engineering bar shared by Pamin Labs repositories - fast, small, quick to build, clean, DRY, decoupled and easy to extend. Use it before writing or changing any code, before adding a dependency, before claiming something is faster or smaller, and when reviewing a change, even when the change looks small. Reach for it on words like Go, Rust, Zig, React, TypeScript, Cloudflare Worker, implement, refactor, optimise, add a crate or package, abstraction, interface, layer, handler, migration, error code, setting, performance, memory, binary size, bundle size, build time, test, lint, review, or "is this over-engineered".
 ---
 
 # The engineering bar
@@ -19,16 +19,17 @@ Walk these in order and stop at the first that answers; each is a rule of `core.
 
 ## Which reference to read
 
-Read every reference the change touches, before writing and again before the PR opens.
+Read `core.md` and each reference for a language or platform the diff changes, before writing and again before the PR opens.
 
 | Reference | Read it when |
 | --- | --- |
 | `references/core.md` | Always: shape of code, layers and domains, errors, data, settings, calls to other services, resources, review, commits and PRs |
-| `references/rust.md` | Writing or reviewing Rust: toolchain, errors, panics, `unsafe`, async, tasks, SQL, tests |
-| `references/go.md` | Writing or reviewing Go: tools, file layout, errors, context, concurrency, types, tests |
-| `references/zig.md` | Writing or reviewing Zig: toolchain, build modes, layers and reuse, names, allocators, error sets, illegal behaviour, SIMD, tests |
+| `references/rust.md` | Writing or reviewing Rust: toolchain, module layout, errors, panics, `unsafe`, types and JSON, async and tasks, logs, SQL, tests, performance |
+| `references/go.md` | Writing or reviewing Go: tools, package layout, file layout, errors, context, concurrency, types, tests |
+| `references/zig.md` | Writing or reviewing Zig: toolchain, build modes, module layout, layers and reuse, names, allocators, error sets, illegal behaviour, SIMD, tests |
 | `references/performance.md` | Touching a request's hot path, a pool, start-up, or a benchmark |
-| `references/web.md` | A React, Vite and TypeScript web client or operator console |
+| `references/typescript.md` | TypeScript anywhere: apps, Workers, tooling, shared libraries |
+| `references/web.md` | A React, Vite and TypeScript web client or operator console: modules, server state, types and guards, locales, interface, CSP and budget, operator consoles |
 | `references/workers.md` | A Cloudflare Worker: routing, containers, config, deploys |
 | `references/rule-scan.md` | Running or continuing a rule-scan pass over a whole repository |
 

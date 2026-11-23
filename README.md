@@ -4,7 +4,7 @@ Agent skills that Pamin Labs' repositories share, in the open [Agent Skills](htt
 
 | Skill | What it holds |
 | --- | --- |
-| [`pamin-engineering`](skills/pamin-engineering/SKILL.md) | Engineering rules for any language (`references/core.md`) and per-language references (Go, Rust, Zig, web, Workers), a performance guide and a rule-scan procedure |
+| [`pamin-engineering`](skills/pamin-engineering/SKILL.md) | Engineering rules for any language (`references/core.md`) and per-language references (Go, Rust, Zig, TypeScript, web, Workers), a performance guide and a rule-scan procedure |
 
 ## Install
 
