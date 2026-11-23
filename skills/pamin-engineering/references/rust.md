@@ -1,13 +1,14 @@
 # Rust
 
-How Rust code meets `core.md` and `performance.md`; read those first.
+Read this when writing or reviewing Rust. It says how Rust code meets `core.md`, `data.md` and `performance.md`; read those first.
 
 ## Toolchain and build
 
 - **Toolchain and lints.** Edition and toolchain are pinned in `rust-toolchain.toml` and upgraded as their own change; code is `rustfmt`-clean and `clippy`-clean with warnings denied (`cargo clippy --all-targets -- -D warnings`), and `cargo deny` checks licences and bans. A lint beyond clippy's defaults (a `clippy::pedantic` lint, `missing_docs`) is enabled in `[lints]` only after its findings on the current tree are counted and found few and worth fixing, and the enabling PR fixes them all.
 - **Build footprint.** A shared `CARGO_TARGET_DIR` keeps disk use down; dev profiles use `debug = "line-tables-only"`.
+- **Unreleased shared crates** are developed against sibling clones through a git-ignored `.cargo/config.toml` `[patch]` section; path or submodule dependencies are never committed, because they break every other checkout and the release build.
 - **Dependency features.** Each dependency is declared once (in `[workspace.dependencies]` in a workspace) with only the features the code calls; `tokio`, `axum` and other large crates never take `full` or unused defaults. A new dependency's added build time is measured with `cargo build --timings`.
-- **Published crates** (ones another repository depends on) keep semver: a public struct or enum that may grow is `#[non_exhaustive]` or has private fields and a constructor, and a breaking change is called out in the PR and released as one. Features are additive (enabling one never removes or changes what another relies on), and the defaults are the smallest set a typical user needs.
+- **Published crates** (ones another repository depends on) keep semver: a public struct or enum that may grow is `#[non_exhaustive]` or has private fields and a constructor, and a breaking change is called out in the PR and released as one. Features are additive (enabling one never removes or changes what another relies on), and the defaults are the smallest set a typical consumer needs.
 
 ## Modules and files
 

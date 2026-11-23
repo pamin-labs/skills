@@ -1,6 +1,6 @@
 # Go
 
-How Go code meets `core.md` and `performance.md`; read those first.
+Read this when writing or reviewing Go. It says how Go code meets `core.md`, `data.md` and `performance.md`; read those first.
 
 ## Toolchain and build
 
@@ -12,7 +12,7 @@ How Go code meets `core.md` and `performance.md`; read those first.
 
 ## Packages and files
 
-- **Package layout.** Code lives under `internal/<layer>/<package>`, one package per directory, none directly under `internal/`. A test reads each package's layer from its import path and fails on a package in no layer or an import that points back (core's layer test).
+- **Package layout.** Code lives under `internal/<layer>/<package>`, one package per directory. A layer that is a single package (a store, an API) may sit directly under `internal/` as `internal/<layer>`; every other package sits in its layer's directory. A test reads each package's layer from its import path and fails on a package in no layer or an import that points back (core's layer test).
 - **Packages** follow core's module rules: named for what they hold (`account`, never `utils`), one per concern, unexported by default, interfaces declared by the consumer. A name reads with its package: `account.Service`, never `account.AccountService`.
 - **File order** is core's in Go terms: imports; types, each enum's constants right after its type; other constants and variables, sentinel errors included; constructors; methods grouped by receiver, exported first; plain helpers in call order. Functions are grouped as the Uber Go Style Guide's "Function Grouping and Ordering" says: by receiver, in rough call order.
 - **Shared types.** Types several files of a package share go in its `types.go` (an API package's request and response types, a domain's errors and value types); a type with methods stays with them.
@@ -26,7 +26,7 @@ How Go code meets `core.md` and `performance.md`; read those first.
 - **Deadlines.** Each call a request waits on runs under `context.WithTimeoutCause`, with a duration named beside the call and a cause naming it. Work that must finish after the request ends (an audit write, a cleanup) runs on `context.WithoutCancel(ctx)` with its own timeout.
 - **Shutdown.** `signal.NotifyContext` cancels the root context on SIGTERM; `http.Server.Shutdown` drains requests before a named deadline, then the wiring awaits its background tasks.
 - **No data races:** shared state is owned by one goroutine or guarded by one mutex; `go test -race` runs in the gates.
-- **Caches and per-user state** use `github.com/hashicorp/golang-lru/v2`, safe for concurrent use; a test fails on a struct field that is a map keyed by a user id.
+- **Caches and per-user state** use `github.com/hashicorp/golang-lru/v2`, safe for concurrent use; a test fails on a struct field that is a map keyed by an end user's id.
 
 ## Types
 
@@ -49,5 +49,6 @@ How Go code meets `core.md` and `performance.md`; read those first.
 - **Static dispatch:** concrete types in hot loops; an interface only at a boundary crossed once per request or less.
 - **Bounded concurrency:** a channel is buffered to a size named once; a fan-out is capped with `errgroup.SetLimit`.
 - **Round trips:** keyset pagination (`id < $1 order by id desc limit n`) with indexes matching each query; independent reads batched (`pgx.Batch`) or folded into one statement.
+- **Paired keyset lists** in sqlc write their source, joins, filters and projection once, in `with filtered as not materialized (...)`; the forward and backward halves read from it and keep only the direction guard, cursor comparison, order and limit. PostgreSQL inlines a `not materialized` CTE into each half, so both still seek the index, and the plan test keeps checking that they do.
 - **Memory:** `GOGC` and `GOMEMLIMIT` are set for the instance size.
 - **Connections:** one pool per process, sized explicitly.
