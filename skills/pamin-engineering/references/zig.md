@@ -74,7 +74,7 @@ This reference adds:
 
 ## Errors and safety
 
-- **Explicit error sets at boundaries.** A public function returns a named error set (`DecodeError!Image`), merged with `||` where layers meet, so a caller can switch over every case; an inferred `!T` only on private helpers. `anyerror` only where a callback or interface requires it. Errors travel with `try` and are handled once, where something can be done: returned or logged, never both, never swallowed (`catch {}` is a defect).
+- **Explicit error sets at boundaries.** A public function returns a named error set (`DecodeError!Image`), merged with `||` where layers meet, so a caller can switch over every case; an inferred `!T` only on private helpers. Every `pub fn` counts, a program's `main` included (the CLI's, a benchmark's, a generator's): it returns a named set such as `MainError!void` or `MainError!u8`, so the program's failures are listed in one place. `anyerror` only where a callback or interface requires it. Errors travel with `try` and are handled once, where something can be done: returned or logged, never both, never swallowed (`catch {}` is a defect).
 - **Errors carry context.** Zig errors carry no payload, so what a caller needs (which file, which offset, which field) goes in a diagnostics value the caller passes in, filled before the error returns.
 - **One code, one error.** Zig error names are global, so an error a client is told about maps to its kind and stable code in one table beside its domain, and a comptime check over the tables fails on a code given twice.
 - **Retryable from the kind.** Whether an error is retryable is one `switch` on the kind enum, and the output carries that flag.
